@@ -1,0 +1,31 @@
+# Unity generated folders
+Library/
+Temp/
+Obj/
+Logs/
+Build/
+Builds/
+UserSettings/
+
+# IDE / editor files
+.vscode/
+.idea/
+*.user
+*.userprefs
+*.csproj
+*.sln
+*.suo
+*.pidb
+*.booproj
+*.svd
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Unity cache / exports
+MemoryCaptures/
+sysinfo.txt
+
+# Local collaboration settings
+.collabignore
