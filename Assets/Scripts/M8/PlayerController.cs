@@ -86,7 +86,23 @@ public class PlayerController : MonoBehaviourPunCallbacks /*IPunObservable*/
         {
             dead = true;
             anim.SetBool("Die", true);
-            transform.Find("Main Camera").GetComponent<ThirdPersonCamera>().isSpectator = true;
+            
+            bool isLastPlayer = true;
+            PlayerController[] allPlayers = FindObjectsOfType<PlayerController>();
+            foreach (var p in allPlayers)
+            {
+                if (p != this && !p.dead)
+                {
+                    isLastPlayer = false;
+                    break;
+                }
+            }
+            
+            if (!isLastPlayer)
+            {
+                transform.Find("Main Camera").GetComponent<ThirdPersonCamera>().isSpectator = true;
+            }
+            
             ChooseWeapon(Weapons.None);
             gameManager.ChangePlayersList();
             //gameManager.PlayerDied(gameObject.name);
@@ -273,6 +289,31 @@ public class PlayerController : MonoBehaviourPunCallbacks /*IPunObservable*/
                     }
                 }
                 break;
+            case "Water":
+                // Solo el dueño de este jugador debe procesar su propia caída y reaparición
+                if (photonView.IsMine)
+                {
+                    // 1. Quitar vida (Pasamos 20 positivo porque ChangeHealth resta: health -= count)
+                    GetDamage(20);
+
+                    // Si el jugador no ha muerto con ese daño, lo reaparecemos
+                    if (!dead && gameManager != null)
+                    {
+                        Vector3 spawnPos = gameManager.GetRandomSpawnPosition();
+                        
+                        // 2. Mover al jugador al punto de reaparición
+                        transform.position = spawnPos;
+
+                        // 3. Resetear fuerzas del Rigidbody para evitar que mantenga la inercia de la caída
+                        // 3. Resetear fuerzas del Rigidbody para evitar que mantenga la inercia de la caída
+                        if (rb != null)
+                        {
+                            rb.velocity = Vector3.zero; // Cambiado a .velocity para tu versión de Unity
+                            rb.angularVelocity = Vector3.zero;
+                        }
+                    }
+                }
+                break;   
             default:
                 break;
         }

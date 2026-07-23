@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 2928711991980966056}
   - component: {fileID: 5521059104655288933}
   - component: {fileID: 8304955756382439682}
-  - component: {fileID: 9211287771946264049}
+  - component: {fileID: 112894218}
   m_Layer: 0
   m_Name: Agua
-  m_TagString: Untagged
+  m_TagString: Water
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -28,11 +28,11 @@ Transform:
   m_GameObject: {fileID: 6433332382044860735}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 385.3271, y: 4.53, z: 380.543}
-  m_LocalScale: {x: 74.17553, y: 1, z: 97.421585}
+  m_LocalScale: {x: 276.41217, y: 1, z: 292.24368}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &5521059104655288933
 MeshFilter:
@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 30f3cffd6816a104898ee245637f6d80, type: 2}
+  - {fileID: 2100000, guid: 59a410df77f0c1e44b2c47816320e40e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &9211287771946264049
-MeshCollider:
+--- !u!65 &112894218
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -99,10 +99,9 @@ MeshCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+  serializedVersion: 3
+  m_Size: {x: 10, y: 2.220446e-16, z: 10}
+  m_Center: {x: 0, y: 0, z: 0}

@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: a07af078d56a43148bfab4838854b552, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -675,6 +675,18 @@ PrefabInstance:
       value: -882.7968
       objectReference: {fileID: 0}
     - target: {fileID: 5936623237862366341, guid: aff391c2b8a800341a4769401f103ce3, type: 3}
+      propertyPath: m_margin.x
+      value: 27.919739
+      objectReference: {fileID: 0}
+    - target: {fileID: 5936623237862366341, guid: aff391c2b8a800341a4769401f103ce3, type: 3}
+      propertyPath: m_margin.y
+      value: 32.575195
+      objectReference: {fileID: 0}
+    - target: {fileID: 5936623237862366341, guid: aff391c2b8a800341a4769401f103ce3, type: 3}
+      propertyPath: m_margin.z
+      value: 41.88977
+      objectReference: {fileID: 0}
+    - target: {fileID: 5936623237862366341, guid: aff391c2b8a800341a4769401f103ce3, type: 3}
       propertyPath: m_fontColor.b
       value: 1
       objectReference: {fileID: 0}
@@ -845,6 +857,18 @@ PrefabInstance:
     - target: {fileID: 8090778999394991375, guid: aff391c2b8a800341a4769401f103ce3, type: 3}
       propertyPath: m_Name
       value: Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 8448225840346649417, guid: aff391c2b8a800341a4769401f103ce3, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8448225840346649417, guid: aff391c2b8a800341a4769401f103ce3, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8448225840346649417, guid: aff391c2b8a800341a4769401f103ce3, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 1682
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

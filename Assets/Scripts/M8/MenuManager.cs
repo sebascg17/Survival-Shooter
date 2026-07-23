@@ -11,6 +11,8 @@ public class MenuManager : MonoBehaviourPunCallbacks
     [SerializeField] TMP_InputField inputField;
     void Start()
     {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         PhotonNetwork.NickName = "Player" + Random.Range(1, 9999); 
         Log("Player Name: " + PhotonNetwork.NickName);
         PhotonNetwork.AutomaticallySyncScene = true; 

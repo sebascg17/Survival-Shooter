@@ -125,17 +125,18 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
 
         System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
-        stringBuilder.Append("Enemy kills:");
-
-        foreach (Photon.Realtime.Player player in PhotonNetwork.PlayerList)
-        {
-            stringBuilder.Append("\n");
-            stringBuilder.Append(player.NickName);
-            stringBuilder.Append(": ");
-            stringBuilder.Append(GetEnemyKills(player.ActorNumber));
-        }
-
+        stringBuilder.Append("Kills: " + GetEnemyKills(PhotonNetwork.LocalPlayer.ActorNumber));
         enemyKillsText.text = stringBuilder.ToString();
+    }
+    // Devuelve una posición de reaparición aleatoria de la lista de spawns
+    public Vector3 GetRandomSpawnPosition()
+    {
+        if (spawns != null && spawns.Count > 0)
+        {
+            int randomIndex = Random.Range(0, spawns.Count);
+            return spawns[randomIndex].position;
+        }
+        return Vector3.zero; // Por si acaso la lista está vacía
     }
 
     public override void OnRoomPropertiesUpdate(ExitGames.Client.Photon.Hashtable propertiesThatChanged)
@@ -187,15 +188,44 @@ public class GameManager : MonoBehaviourPunCallbacks
         playersText.text = "Players: " + activePlayers.Count.ToString();
         RefreshEnemyKillsText();
 
-        if (activePlayers.Count <= 1 && checkPlayers > 0)
+        if (checkPlayers > 0)
         {
-            PlayerPrefs.SetString("Winner", activePlayers[0]);
-            var enemies = GameObject.FindGameObjectsWithTag("enemy");
-            foreach (GameObject enemy in enemies)
+            if (activePlayers.Count == 1)
             {
-                enemy.GetComponent<Enemy>().ChangeHealth(100);
+                PlayerPrefs.SetString("Winner", activePlayers[0]);
+                var enemies = GameObject.FindGameObjectsWithTag("enemy");
+                foreach (GameObject enemy in enemies)
+                {
+                    Enemy enemyComponent = enemy.GetComponent<Enemy>();
+                    if (enemyComponent == null)
+                    {
+                        enemyComponent = enemy.GetComponentInChildren<Enemy>(true);
+                    }
+                    if (enemyComponent != null)
+                    {
+                        enemyComponent.ChangeHealth(100);
+                    }
+                }
+                Invoke("EndGame", 5f);
             }
-            Invoke("EndGame", 5f);
+            else if (activePlayers.Count == 0)
+            {
+                PlayerPrefs.SetString("Winner", "Nobody");
+                var enemies = GameObject.FindGameObjectsWithTag("enemy");
+                foreach (GameObject enemy in enemies)
+                {
+                    Enemy enemyComponent = enemy.GetComponent<Enemy>();
+                    if (enemyComponent == null)
+                    {
+                        enemyComponent = enemy.GetComponentInChildren<Enemy>(true);
+                    }
+                    if (enemyComponent != null)
+                    {
+                        enemyComponent.ChangeHealth(100);
+                    }
+                }
+                Invoke("EndGame", 5f);
+            }
         }
         checkPlayers++;        
     }
@@ -230,13 +260,17 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             if (PhotonNetwork.IsMasterClient)
             {
-                photonView.RPC("ShowEnemiesDefeatedUi", RpcTarget.All);
+                Invoke("TriggerVictory", 0.5f);
             }
 
             enemiesDefeated = true;
         }
 
         checkEnemies++;
+    }
+    private void TriggerVictory()
+    {
+        photonView.RPC("ShowEnemiesDefeatedUi", RpcTarget.All);
     }
     public void EndGame()
     {        
@@ -246,19 +280,52 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void ShowEnemiesDefeatedUi()
     {
+        SaveEnemyVictoryProgress();
+        PlayerPrefs.Save();
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
         if (enemiesDefeatedUi != null)
         {
             enemiesDefeatedUi.SetActive(true);
         }
 
-        PlayerController[] playerControllers = FindObjectsOfType<PlayerController>();
-        foreach (PlayerController playerController in playerControllers)
+        GameObject[] playerObjects = GameObject.FindGameObjectsWithTag("Player");
+        foreach (GameObject playerObject in playerObjects)
         {
-            if (playerController != null)
+            PhotonView playerPhotonView = playerObject.GetComponent<PhotonView>();
+            PlayerController playerController = playerObject.GetComponent<PlayerController>();
+
+            if (playerPhotonView != null && playerPhotonView.IsMine && playerController != null)
             {
                 playerController.HideHudOnVictory();
             }
         }
+    }
+
+    private void SaveEnemyVictoryProgress()
+    {
+        string winnerName = string.Empty;
+        int winnerKills = 0;
+
+        foreach (Photon.Realtime.Player player in PhotonNetwork.PlayerList)
+        {
+            int kills = GetEnemyKills(player.ActorNumber);
+            if (kills >= winnerKills)
+            {
+                winnerKills = kills;
+                winnerName = player.NickName;
+            }
+        }
+
+        if (string.IsNullOrWhiteSpace(winnerName) && PhotonNetwork.LocalPlayer != null)
+        {
+            winnerName = PhotonNetwork.LocalPlayer.NickName;
+        }
+
+        PlayerPrefs.SetString("Winner", winnerName);
+        PlayerPrefs.SetInt("WinnerKills", winnerKills);
     }
     public void ExitGame()
     {

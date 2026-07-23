@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEditor;
 
 using Photon.Pun;
 using UnityEngine.UI;
@@ -18,6 +17,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     void Start()
     {
         Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         RefreshPlayers();
         if (!PhotonNetwork.IsMasterClient)
         {
@@ -26,7 +26,15 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         if (PlayerPrefs.HasKey("Winner") && PhotonNetwork.IsMasterClient)
         {
             string winner = PlayerPrefs.GetString("Winner");
-            photonView.RPC("ShowMessage", RpcTarget.All, "The last match was won: " + winner);
+            string message = "The last match was won by: " + winner;
+
+            if (PlayerPrefs.HasKey("WinnerKills"))
+            {
+                int winnerKills = PlayerPrefs.GetInt("WinnerKills");
+                message += " and killed " + winnerKills.ToString() + " enemies.";
+            }
+
+            photonView.RPC("ShowMessage", RpcTarget.All, message);
             PlayerPrefs.DeleteAll();
         }
     }

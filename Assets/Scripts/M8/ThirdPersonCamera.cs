@@ -56,13 +56,6 @@ public class ThirdPersonCamera : MonoBehaviour
             Vector3 dir = transform.right * x + transform.forward * z;
             transform.position += dir * speed * Time.deltaTime;
         }
-        if(Input.GetKeyDown(KeyCode.Escape))
-        {
-            if (gameManager != null)
-            {
-                gameManager.ToggleMenu();
-            }
-        }
     }
 }
  
